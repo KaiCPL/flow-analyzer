@@ -4,9 +4,10 @@ var audioVisual=document.getElementById('spectrum'),
 	context=new AudioContext(),
 	audio=new Audio(),
 	analyser=context.createAnalyser(),
-	source=context.createMediaElementSource(audio);
+	source=context.createMediaElementSource(audio),
+	path='/example/path/to/sound.ogg';
 with(audio)
-	src='/sound/depe.ogg',
+	src=path,
 	controls=loop=autoplay=true,
 	id='a',
 	onended=function(){next()};
@@ -15,7 +16,7 @@ source.connect(analyser);
 with(analyser) fftSize=8192, connect(context.destination);
 with(window) requestAnimFrame=(function(){return requestAnimationFrame||webkitRequestAnimationFrame||mozRequestAnimationFrame||function(callback){setTimeout(callback,1000/60)}})();
 function async_get(url,callback){ with(x=new XMLHttpRequest()) onreadystatechange=function(){ return readyState==4 && status==200 && callback(responseText); }, open("GET",url,true), send(null); }
-function next(){ async_get('/sound/_soundlist.php?rand=true',function(data){ console.log("playing "+data); audio.src=data; audio.play(); }); }
+function next(){ async_get(path,function(data){ console.log("playing "+data); audio.src=data; audio.play(); }); }
 function pause(){ audio.pause(); button_pause.classList.remove("fa-pause"); link_pause.setAttribute("onclick","play()"); }
 function play(){ audio.play(); button_pause.classList.add("fa-pause"); link_pause.setAttribute("onclick","pause()"); }
 next(),(function t(){ window.requestAnimFrame(t);
